@@ -6,4 +6,4 @@ license = "MIT"
 authors = ["Vadim Kolchanov <kolchanov.dev@gmail.com>"]
 realm = "shared"
 registry = "https://github.com/upliftgames/wally-index"
-repository = "https://github.com/Vadim-Kolchanov/roblox-development-kit"
+repository = "https://github.com/kolchanov-dev/roblox-development-kit"
