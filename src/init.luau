@@ -1,6 +1,11 @@
 --!strict
-local Queue = require(script.ICollection.Queue)
+local Collection = require(script.Collection)
+local Queue = require(script.Collection.Queue)
 
+--[[
+	Interface definitions for RDK collections.
+]]
+export type Collection<T> = Collection.Collection<T>
 export type Queue<T> = Queue.Queue<T>
 
 --[[

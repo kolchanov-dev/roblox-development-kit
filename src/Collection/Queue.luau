@@ -1,23 +1,30 @@
 --!strict
-local ICollection = require(script.Parent)
+local Collection = require(script.Parent)
+
+local NOT_SUPPORTED_MESSAGE = "This operation is not supported by Queue"
 
 local Queue = {}
-Queue.__index = setmetatable(Queue, ICollection)
+Queue.__index = Queue
 
-export type Queue<T> = typeof(Queue) & ICollection.ICollection & {
-	_first: number,
-	_last: number,
-	_queue: { T },
-}
+export type Queue<T> =
+	typeof(setmetatable(
+		{} :: {
+			_first: number,
+			_last: number,
+			_queue: { T },
+		},
+		Queue
+	))
+	& Collection.Collection<T>
 
 function Queue.new<T>(): Queue<T>
-	local self = setmetatable(ICollection.new() :: Queue<T>, Queue)
+	local self = setmetatable({
+		_first = 0,
+		_last = -1,
+		_queue = {},
+	}, Queue)
 
-	self._first = 0
-	self._last = -1
-	self._queue = {}
-
-	return self
+	return self :: Queue<T>
 end
 
 --[[
@@ -53,8 +60,8 @@ end
 	Returns true if this collection contains the specified element.
 ]]
 function Queue.contains<T>(_self: Queue<T>, element: T): boolean
-	for _, value in ipairs(_self._queue) do
-		if value == element then
+	for i = _self._first, _self._last do
+		if _self._queue[i] == element then
 			return true
 		end
 	end
@@ -64,15 +71,22 @@ end
 --[[
 	Returns true if this collection contains no elements.
 ]]
-function Queue.isEmpty<T>(self: Queue<T>)
+function Queue.isEmpty<T>(self: Queue<T>): boolean
 	return self._first > self._last
+end
+
+--[[
+	Not supported.
+]]
+function Queue.remove<T>(_self: Queue<T>, _element: T): boolean
+	error(NOT_SUPPORTED_MESSAGE)
 end
 
 --[[
 	Returns the number of elements in this collection.
 ]]
 function Queue.size<T>(self: Queue<T>): number
-	return #self._queue
+	return self._last - self._first + 1
 end
 
 --[[
@@ -95,7 +109,11 @@ end
 	Returns an array containing all of the elements in this collection.
 ]]
 function Queue.toArray<T>(self: Queue<T>): { T }
-	return table.clone(self._queue)
+	local result = {}
+	for i = self._first, self._last do
+		table.insert(result, self._queue[i])
+	end
+	return result
 end
 
 return Queue
