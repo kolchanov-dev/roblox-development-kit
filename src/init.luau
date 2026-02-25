@@ -2,11 +2,19 @@
 local Collection = require(script.Collection)
 local Queue = require(script.Collection.Queue)
 
+local Map = require(script.Map)
+local HashMap = require(script.Map.HashMap)
+
 --[[
 	Interface definitions for RDK collections.
 ]]
 export type Collection<T> = Collection.Collection<T>
 export type Queue<T> = Queue.Queue<T>
+--[[
+	Interface definitions for RDK maps.
+]]
+export type Map<K, V> = Map.Map<K, V>
+export type HashMap<K, V> = HashMap.HashMap<K, V>
 
 --[[
 	RDK - Roblox Development Kit
@@ -15,6 +23,9 @@ export type Queue<T> = Queue.Queue<T>
 local RDK = table.freeze({
 	Collection = {
 		Queue = Queue,
+	},
+	Map = {
+		HashMap = HashMap,
 	},
 })
 
