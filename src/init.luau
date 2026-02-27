@@ -27,6 +27,9 @@ local RDK = table.freeze({
 	Map = {
 		HashMap = HashMap,
 	},
+	Utils = {
+		UnitsUtils = require(script.Utils.UnitsUtils),
+	},
 })
 
 return RDK
