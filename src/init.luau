@@ -29,6 +29,7 @@ local RDK = table.freeze({
 	},
 	Utils = {
 		UnitsUtils = require(script.Utils.UnitsUtils),
+		TimeUtils = require(script.Utils.TimeUtils),
 	},
 })
 
