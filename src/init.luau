@@ -1,6 +1,7 @@
 --!strict
 local Collection = require(script.Collection)
 local Queue = require(script.Collection.Queue)
+local Set = require(script.Collection.Set)
 
 local Map = require(script.Map)
 local HashMap = require(script.Map.HashMap)
@@ -10,6 +11,7 @@ local HashMap = require(script.Map.HashMap)
 ]]
 export type Collection<T> = Collection.Collection<T>
 export type Queue<T> = Queue.Queue<T>
+export type Set<T> = Set.Set<T>
 --[[
 	Interface definitions for RDK maps.
 ]]
@@ -23,6 +25,7 @@ export type HashMap<K, V> = HashMap.HashMap<K, V>
 local RDK = table.freeze({
 	Collection = {
 		Queue = Queue,
+		Set = Set,
 	},
 	Map = {
 		HashMap = HashMap,
