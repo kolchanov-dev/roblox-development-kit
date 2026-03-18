@@ -12,6 +12,7 @@ local TWO_NUMBER_FORMAT = "%02d:%02d"
 
 local SECONDS_IN_HOUR = 3600
 local SECONDS_IN_MINUTE = 60
+local SECONDS_IN_DAY = 86400
 
 local TimeUtils = {
 	Formats = FORMATS,
@@ -40,6 +41,25 @@ end
 --- @return string -- String in format "mm:ss" (e.g., "01:30" for 90 seconds)
 function TimeUtils.formatSecondsToMmSs(seconds: number): string
 	return TimeUtils.formatTime(seconds, FORMATS.MM_SS)
+end
+
+--- Checks if a new UTC day has started since the last reset time
+--- @param lastResetTime number -- Unix timestamp of the last reset
+--- @return boolean -- True if a new UTC day has started
+function TimeUtils.isNewUTCDay(lastResetTime: number): boolean
+	local now = os.time()
+	local lastResetDate = os.date("!*t", lastResetTime)
+	local currentDate = os.date("!*t", now)
+
+	return (currentDate :: any).yday ~= (lastResetDate :: any).yday
+		or (currentDate :: any).year ~= (lastResetDate :: any).year
+end
+
+--- Checks if more than 24 hours have passed since the last reset time
+--- @param lastResetTime number -- Unix timestamp of the last reset
+--- @return boolean -- True if 24 hours or more have passed
+function TimeUtils.hasPassedDay(lastResetTime: number): boolean
+	return os.time() - lastResetTime >= SECONDS_IN_DAY
 end
 
 return table.freeze(TimeUtils)
