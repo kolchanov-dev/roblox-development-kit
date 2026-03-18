@@ -7,15 +7,17 @@ local FORMATS: { [string]: TimeFormat } = {
 	MM_SS = "mm:ss",
 }
 
-local THREE_NUMBER_FORMAT = "%02d:%02d:%02d"
-local TWO_NUMBER_FORMAT = "%02d:%02d"
-
-local SECONDS_IN_HOUR = 3600
-local SECONDS_IN_MINUTE = 60
-local SECONDS_IN_DAY = 86400
+local CONSTANTS = {
+	THREE_NUMBER_FORMAT = "%02d:%02d:%02d",
+	TWO_NUMBER_FORMAT = "%02d:%02d",
+	SECONDS_IN_HOUR = 3600,
+	SECONDS_IN_MINUTE = 60,
+	SECONDS_IN_DAY = 86400,
+}
 
 local TimeUtils = {
 	Formats = FORMATS,
+	Constants = CONSTANTS,
 }
 
 --- Converts seconds to specified time format
@@ -25,14 +27,14 @@ local TimeUtils = {
 function TimeUtils.formatTime(seconds: number, format: TimeFormat?): string
 	format = format or FORMATS.MM_SS
 
-	local hours = math.floor(seconds / SECONDS_IN_HOUR)
-	local minutes = math.floor((seconds % SECONDS_IN_HOUR) / SECONDS_IN_MINUTE)
-	local remainingSeconds = math.floor(seconds % SECONDS_IN_MINUTE)
+	local hours = math.floor(seconds / CONSTANTS.SECONDS_IN_HOUR)
+	local minutes = math.floor((seconds % CONSTANTS.SECONDS_IN_HOUR) / CONSTANTS.SECONDS_IN_MINUTE)
+	local remainingSeconds = math.floor(seconds % CONSTANTS.SECONDS_IN_MINUTE)
 
 	return if format == FORMATS.HH_MM_SS
-		then string.format(THREE_NUMBER_FORMAT, hours, minutes, remainingSeconds)
-		elseif format == FORMATS.HH_MM then string.format(TWO_NUMBER_FORMAT, hours, minutes)
-		elseif format == FORMATS.MM_SS then string.format(TWO_NUMBER_FORMAT, minutes, remainingSeconds)
+		then string.format(CONSTANTS.THREE_NUMBER_FORMAT, hours, minutes, remainingSeconds)
+		elseif format == FORMATS.HH_MM then string.format(CONSTANTS.TWO_NUMBER_FORMAT, hours, minutes)
+		elseif format == FORMATS.MM_SS then string.format(CONSTANTS.TWO_NUMBER_FORMAT, minutes, remainingSeconds)
 		else error(`Unknown time format: {format}`)
 end
 
@@ -59,7 +61,7 @@ end
 --- @param lastResetTime number -- Unix timestamp of the last reset
 --- @return boolean -- True if 24 hours or more have passed
 function TimeUtils.hasPassedDay(lastResetTime: number): boolean
-	return os.time() - lastResetTime >= SECONDS_IN_DAY
+	return os.time() - lastResetTime >= CONSTANTS.SECONDS_IN_DAY
 end
 
 return table.freeze(TimeUtils)
